@@ -32,6 +32,10 @@ void dealwithTask(string str, Task task[], int &taskNum)
 
     action = dealAction(str);
     task[taskNum].setAct(action);
+    if(action == "give")
+    {
+        task[taskNum].getNamey("human");
+    }
 
     right = str.find(")");
     str = str.substr(right + 9);

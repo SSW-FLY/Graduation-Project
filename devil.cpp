@@ -60,7 +60,7 @@ void Devil::Plan()
     dealnumY(sort,task1,countSort,taskNum);
     dealnumX(sort,task1,countSort,taskNum);
     setArrLoc(sort,task1,taskNum,countSort);
-    planWithNormal(sort,r,task1,tasknum,countSort);
+    //planWithNormal(sort,r,task1,tasknum,countSort);
     
     initalMap(task1,taskNum,m);
     dealBoolY(m,task1,taskNum);
@@ -79,10 +79,11 @@ void Devil::Plan()
     findIndex(task1,index,taskNum,m,icount);
     DFSALL(m,visited,index,icount,path,pathNum);//
     cout<<"------------------------"<<endl;
-    for(int i = 0;i<pathNum;i++)
-    {
-        cout<<path[i]<<endl;
-    }
+    // for(int i = 0;i<pathNum;i++)
+    // {
+    //     cout<<path[i]<<endl;
+    // }
+    planWithGraph(task1,path,pathNum,taskNum,sort,robot);
     
 
 

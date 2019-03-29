@@ -416,7 +416,7 @@ void Devil::planWithGraph(Task task[], int path[], int pathNum, int taskNum, Sor
                     {
                     }
                 }
-                else if (task[i].getAct() == "puton")
+                else if (task[j].getAct() == "puton")
                 {
                     int plate = robot.getPlate();
                     int hold  = robot.getHold();
@@ -425,7 +425,7 @@ void Devil::planWithGraph(Task task[], int path[], int pathNum, int taskNum, Sor
                         PutDown(hold);
                         robot.setHold(0);
                     }
-                    else if (Plate == task[j].getNumX())
+                    else if (plate == task[j].getNumX())
                     {
                         if (hold != 0)
                         {
@@ -456,12 +456,12 @@ void Devil::planWithGraph(Task task[], int path[], int pathNum, int taskNum, Sor
                     {
                     }
                 }
-                else if (task[i].getAct() == "give")
+                else if (task[j].getAct() == "give")
                 {
                 }
 
                 //拿出来然后放下
-                else if (task[i].getAct() == "takeout")
+                else if (task[j].getAct() == "takeout")
                 {
                     int plate = robot.getPlate();
                     int hold  = robot.getHold();
@@ -516,7 +516,7 @@ void Devil::planWithGraph(Task task[], int path[], int pathNum, int taskNum, Sor
                 int hold  = robot.getHold();
                 if (task[j].getAct() == "putdown")
                 {
-                    if (hold == task[j].getNumX)
+                    if (hold == task[j].getNumX())
                     {
                         PutDown(hold);
                         robot.setHold(0);
@@ -609,6 +609,12 @@ void Devil::planWithGraph(Task task[], int path[], int pathNum, int taskNum, Sor
                     }
                     else if (plate == 0)
                     {
+                        ToPlate(hold);
+                        robot.setHold(0);
+                        robot.setPlate(hold);
+
+                        PickUp(numX);
+                        robot.setHold(numX);
                     }
                 }
                 else
@@ -626,17 +632,167 @@ void Devil::planWithGraph(Task task[], int path[], int pathNum, int taskNum, Sor
                 go(path[i], sort, robot);
                 int numX = task[j].getNumX();
                 int numY = task[j].getNumY();
+                //先拿东西
                 if (task[j].getAct() == "putin")
                 {
+                    // if (hold == 0)
+                    // {
+                    //     PickUp(numX);
+                    //     robot.setHold(numX);
+                    // }
+                    // else if (plate == 0)
+                    // {
+                    //     ToPlate(hold);
+                    //     robot.setHold(0);
+                    //     robot.setPlate(hold);
+                    //
+                    //     PickUp(numX);
+                    //     robot.setHold(numX);
+                    // }
+                    // else//都不为空不执行，基本不会出现这种情况
+                    // {}
+                    //让手为空
+                    if (hold != 0)
+                    {
+                        if (plate == 0)
+                        {
+                            ToPlate(hold);
+                            robot.setHold(0);
+                            robot.setPlate(hold);
+                        }
+                        else
+                        {
+                            PutDown(hold);
+                            robot.setHold(0);
+                        }
+                    }
+                    if (sort[numX].getInside() == 0)
+                    {
+                        PickUp(numX);
+                        robot.setHold(numX);
+                    }
+                    else if (sort[numX].getInside() != 0)
+                    {
+                        int num_Y = sort[numX].getInside();
+                        if (sort[num_Y].getOpened() == false)
+                        {
+                            Open(num_Y);
+                            sort[num_Y].setopened(1);
+                        }
+
+                        TakeOut(numX, num_Y);
+                        robot.setHold(numX);
+                        sort[numX].setinside(0);
+                    }
+                    else
+                    {
+                    }
                 }
                 else if (task[j].getAct() == "puton")
                 {
+                    if (hold != 0)
+                    {
+                        if (plate == 0)
+                        {
+                            ToPlate(hold);
+                            robot.setHold(0);
+                            robot.setPlate(hold);
+                        }
+                        else
+                        {
+                            PutDown(hold);
+                            robot.setHold(0);
+                        }
+                    }
+                    if (sort[numX].getInside() == 0)
+                    {
+                        PickUp(numX);
+                        robot.setHold(numX);
+                    }
+                    else if (sort[numX].getInside() != 0)
+                    {
+                        int num_Y = sort[numX].getInside();
+                        if (sort[num_Y].getOpened() == false)
+                        {
+                            Open(num_Y);
+                            sort[num_Y].setopened(1);
+                        }
+
+                        TakeOut(numX, num_Y);
+                        robot.setHold(numX);
+                        sort[numX].setinside(0);
+                    }
+                    else
+                    {
+                    }
                 }
                 else if (task[j].getAct() == "give")
                 {
+                    if (hold != 0)
+                    {
+                        if (plate == 0)
+                        {
+                            ToPlate(hold);
+                            robot.setHold(0);
+                            robot.setPlate(hold);
+                        }
+                        else
+                        {
+                            PutDown(hold);
+                            robot.setHold(0);
+                        }
+                    }
+                    if (sort[numX].getInside() == 0)
+                    {
+                        PickUp(numX);
+                        robot.setHold(numX);
+                    }
+                    else if (sort[numX].getInside() != 0)
+                    {
+                        int num_Y = sort[numX].getInside();
+                        if (sort[num_Y].getOpened() == false)
+                        {
+                            Open(num_Y);
+                            sort[num_Y].setopened(1);
+                        }
+
+                        TakeOut(numX, num_Y);
+                        robot.setHold(numX);
+                        sort[numX].setinside(0);
+                    }
+                    else
+                    {
+                    }
                 }
                 else if (task[j].getAct() == "takeout")
                 {
+                    if (sort[numX].getInside() == numY)
+                    {
+                        if (hold != 0)
+                        {
+                            if (plate == 0)
+                            {
+                                ToPlate(hold);
+                                robot.setHold(0);
+                                robot.setPlate(hold);
+                            }
+                            else
+                            {
+                                PutDown(hold);
+                                robot.setHold(0);
+                            }
+                        }
+
+                        if (sort[numY].getOpened() == false)
+                        {
+                            Open(numY);
+                            sort[numY].setopened(1);
+                        }
+
+                        TakeOut(numX, numY);
+                        robot.setHold(numX);
+                        sort[numX].setinside(0);
+                    }
                 }
                 else
                 {
